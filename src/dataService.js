@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import SUPABASE_CLIENT from "./config";
+import { v4 as uuidv4 } from "uuid"
 
 const productList = ref();
 const displayError = ref();
@@ -30,31 +31,23 @@ const dataService = () => {
    */
   const saveProducts = async (formData) => {
     try {
+      // 1) save image
       const { file, ...productData } = formData;
+      const imagePath = `products/${uuidv4()}-${file.name}`;
 
-      // save the image
-      debugger;
-      const { data, error } = await SUPABASE_CLIENT.storage
+      const { error: sError } = await SUPABASE_CLIENT.storage
         .from("product-bucket")
-        .upload(`products/${file.name}`, file);
-      if (error) {
-        throw error;
-      }
+        .upload(imagePath, file);
+      if (sError) throw sError;
 
-      console.log(data);
-
-      // save the data
-      productData["image"] = `products/${file.name}`;
-
-      const { data: prodData, error: prodError } = await SUPABASE_CLIENT.from(
+      // 2) save to database with image ref
+      const { data: dbData, error: dbError } = await SUPABASE_CLIENT.from(
         "products"
-      ).insert([productData]);
-      console.log(prodData);
-      console.log(prodError);
-      debugger;
-      return { success: true };
+      ).insert([{ ...productData, image: imagePath }]);
+      if (dbError) throw dbError;
+
+      return { success: true, data: dbData };
     } catch (e) {
-      debugger;
       console.log(e);
       return { success: false, error: e };
     }
@@ -65,23 +58,26 @@ const dataService = () => {
    *
    * @param {*} productId
    */
-  const removeProduct = async (productId, imagePath) => {
-    debugger;
+  const removeProduct = async (product) => {
+    try {
+      // delete from database
+      const { error: prodError } = await SUPABASE_CLIENT.from("products")
+        .delete()
+        .eq("id", product.id);
+      if (prodError) throw prodError;
 
-    // delete product
-    const { error: pv_error } = await SUPABASE_CLIENT.from("product_variants")
-      .delete()
-      .eq("product_id", productId);
-    console.log("pv_error", pv_error);
+      // deleting from storage
+      if (product?.image) {
+        const { error: storageError } = await SUPABASE_CLIENT.storage
+          .from("product-bucket")
+          .remove([product.image]);
 
-    const { error: prod_error } = await SUPABASE_CLIENT.from("products")
-      .delete()
-      .eq("id", productId);
-    console.log("prod_error", prod_error);
-
-    // delete the image
-    if (imagePath) {
-      await SUPABASE_CLIENT.storage.from("product-bucket").remove([imagePath]);
+        if (storageError) throw storageError;
+      }
+    } catch (e) {
+      debugger;
+      console.log(e);
+      throw Error(e);
     }
   };
 
@@ -89,33 +85,22 @@ const dataService = () => {
    * load all of the products in the product table
    */
   const loadProducts = async () => {
+    // private function
     const load = async () => {
       let { data, error } = await SUPABASE_CLIENT.from("products").select(`
-      *,
-      product_variants (
-        *
-      )
-    `);
-
-      const {
-        data: prods,
-        error: prodError,
-      } = await SUPABASE_CLIENT.storage
-        .from("product-bucket")
-        .list("products");
-      if (prodError) {
-        console.log(prodError);
-        throw error;
-      }
-
-      console.log(prods);
-
+    *,
+    product_variants (
+      *
+    )
+  `);
       productList.value = data;
       displayError.value = error;
+
       return { data, error };
     };
 
-    const subscription = SUPABASE_CLIENT.from("products")
+    // subscribe
+    SUPABASE_CLIENT.from("products")
       .on("*", async (payload) => {
         console.log("Change received!", payload);
         await load();
@@ -123,8 +108,6 @@ const dataService = () => {
       .subscribe();
 
     await load();
-
-    return { data: productList.value, error: displayError.value, subscription };
   };
 
   /**
@@ -158,7 +141,11 @@ const dataService = () => {
    */
   const logout = async () => {
     let { user, error } = await SUPABASE_CLIENT.auth.signOut();
-    debugger;
+
+    // clean up
+    SUPABASE_CLIENT.getSubscriptions().map((s) => {
+      SUPABASE_CLIENT.removeSubscription(s);
+    });
     console.log(error && error.message);
     return { user, error };
   };
@@ -170,7 +157,7 @@ const dataService = () => {
     let { user, error } = await SUPABASE_CLIENT.auth.api.resetPasswordForEmail(
       email
     );
-    debugger;
+    
     console.log(error && error.message);
     return { user, error };
   };
@@ -182,7 +169,7 @@ const dataService = () => {
         password_changed: new Date(),
       },
     });
-    debugger;
+    
     console.log(error && error.message);
     return { user, error };
   };

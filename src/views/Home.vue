@@ -109,7 +109,7 @@ export default {
     };
 
     const deleletProduct = async product => {
-      await removeProduct(product.id, product.image);
+      await removeProduct(product);
     };
 
     const doLogout = async () => {

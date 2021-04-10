@@ -1,18 +1,23 @@
 <template>
-  <img :src="imageUrl" width="250" />
+  <IonImg :src="imageUrl" width="250" />
 </template>
 
 <script>
+import { IonImg } from "@ionic/vue";
 import { ref } from "@vue/runtime-core";
 import SUPABASE_CLIENT from "../config";
 import missingImage from "@/assets/no_image_available.jpeg";
+
 export default {
   name: "ImageView",
+  components: {
+    IonImg
+  },
   props: {
     image: String
   },
   setup(props) {
-    const imageUrl = ref();
+    const imageUrl = ref(null);
 
     /**
      *
@@ -23,21 +28,15 @@ export default {
         return;
       }
 
-      try {
-        const { data, error } = await SUPABASE_CLIENT.storage
-          .from("product-bucket")
-          .download(path);
-        if (error) {
-          throw error;
-        }
-        const url = URL.createObjectURL(data);
-        imageUrl.value = url;
-      } catch (error) {
-        console.log("Error downloading image: ", error.message);
-      }
+      const { data, error } = await SUPABASE_CLIENT.storage
+        .from("product-bucket")
+        .download(path);
+      if (error) throw error;
+      imageUrl.value = URL.createObjectURL(data);
     };
 
     downloadImage(props?.image);
+
     return {
       imageUrl
     };

@@ -12,6 +12,7 @@
     "@ionic/vue-router": "5.6.3",
     "@supabase/supabase-js": "1.7.7",
     "core-js": "^3.6.5",
+    "uuid": "^8.3.2",
     "vue": "^3.0.0-0",
     "vue-router": "4.0.1"
   },

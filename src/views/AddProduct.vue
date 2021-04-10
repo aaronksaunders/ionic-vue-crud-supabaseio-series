@@ -38,7 +38,8 @@
         </ion-select>
       </ion-item>
       <ion-item>
-        <input id="file" type="file" @change="handleFileChange" />
+        <ion-label position="stacked">Image</ion-label>
+        <ion-input type="file" @change="handleFileChange"></ion-input>
       </ion-item>
     </ion-content>
   </ion-page>
@@ -58,7 +59,7 @@ import {
   IonButtons,
   IonButton,
   IonSelect,
-  IonSelectOption
+  IonSelectOption,
 } from "@ionic/vue";
 
 import { ref } from "vue";
@@ -79,7 +80,7 @@ export default {
     IonButtons,
     IonButton,
     IonSelect,
-    IonSelectOption
+    IonSelectOption,
   },
   setup() {
     const router = useRouter();
@@ -91,36 +92,39 @@ export default {
       description: "",
       list_price: 0,
       sale_price: 0,
-      category: "Sweater"
+      category: "Sweater",
     });
 
-    const handleFileChange = event => {
-      debugger;
-      selectedFile.value = event.target.files[0];
-    };
-
+    /**
+     *
+     */
     const saveProductToDatabase = async () => {
       try {
-        debugger;
         await saveProducts({
           ...formData.value,
           list_price: Number(formData.value.list_price * 100),
           sale_price: Number(formData.value.sale_price * 100),
-          file: selectedFile.value
+          file : selectedFile.value
         });
         router.back();
       } catch (e) {
-        debugger;
         alert(e.message);
       }
+    };
+
+    /**
+     *
+     */
+    const handleFileChange = (event) => {
+      selectedFile.value = event.target.files[0];
     };
 
     return {
       saveProductToDatabase,
       formData,
-      handleFileChange
+      handleFileChange,
     };
-  }
+  },
 };
 </script>
 
