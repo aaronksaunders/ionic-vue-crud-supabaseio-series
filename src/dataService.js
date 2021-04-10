@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import SUPABASE_CLIENT from "./config";
-import { v4 as uuidv4 } from "uuid"
+import { v4 as uuidv4 } from "uuid";
 
 const productList = ref();
 const displayError = ref();
@@ -17,11 +17,18 @@ const dataService = () => {
    */
   const initialize = async () => {
     session.value = SUPABASE_CLIENT.auth.session();
+
+    // if there is a session at startup, load the data
+    if (session.value) {
+      await loadProducts();
+    }
+
     SUPABASE_CLIENT.auth.onAuthStateChange(async (_event, _session) => {
-      console.log(_event, _session);
       session.value = _session;
 
-      if (_event === "SIGNED_IN") {
+      // if there is a session at startup, because of
+      // a state change, then load the data
+      if (_session) {
         await loadProducts();
       }
     });
@@ -156,7 +163,7 @@ const dataService = () => {
     let { user, error } = await SUPABASE_CLIENT.auth.api.resetPasswordForEmail(
       email
     );
-    
+
     console.log(error && error.message);
     return { user, error };
   };
@@ -168,7 +175,7 @@ const dataService = () => {
         password_changed: new Date(),
       },
     });
-    
+
     console.log(error && error.message);
     return { user, error };
   };
