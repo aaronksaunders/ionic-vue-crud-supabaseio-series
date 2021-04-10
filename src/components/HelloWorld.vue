@@ -13,7 +13,6 @@ export default {
     watch(props.image, (cur, prev) => {
       console.log(cur, prev);
       if (cur !== prev) {
-        debugger;
       }
     });
   }

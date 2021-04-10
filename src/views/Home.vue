@@ -114,7 +114,7 @@ export default {
 
     const doLogout = async () => {
       await logout();
-      router.replace("/auth");
+      router.replace("/login");
     };
 
     return {

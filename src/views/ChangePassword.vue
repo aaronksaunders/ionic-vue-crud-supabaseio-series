@@ -73,7 +73,6 @@ export default {
           return;
         }
         const { user, error } = await changePassword(password1);
-        debugger;
         if (user) router.replace("/home");
         if (error) throw error;
         alert("Password Changed");

@@ -75,7 +75,6 @@ const dataService = () => {
         if (storageError) throw storageError;
       }
     } catch (e) {
-      debugger;
       console.log(e);
       throw Error(e);
     }

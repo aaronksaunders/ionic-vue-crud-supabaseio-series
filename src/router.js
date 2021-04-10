@@ -44,7 +44,6 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const { hasUser } = dataService();
   console.log("beforeEach", hasUser());
-  debugger;
   if (to.fullPath.indexOf("type=recovery") != -1) {
     next("/change-password");
   } else if (to.meta.requiresAuth && !hasUser()) {
