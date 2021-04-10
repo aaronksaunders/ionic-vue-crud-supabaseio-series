@@ -67,7 +67,6 @@ import { addCircleOutline, logOutOutline } from "ionicons/icons";
 import { useRouter } from "vue-router";
 import dataService from "../dataService";
 import ImageView from "../components/ImageView.vue"
-import SUPABASE_CLIENT from '../config';
 
 export default {
   name: "Home",
