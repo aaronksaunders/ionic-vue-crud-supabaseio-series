@@ -1,0 +1,13 @@
+{
+  "appId": "com.fiwic.ionic.vuecrudsupabaseio",
+  "appName": "ionic-vue-supabaseio",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

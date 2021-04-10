@@ -1,0 +1,7 @@
+{
+  "name": "ionic-vue-crud-supabaseio",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}

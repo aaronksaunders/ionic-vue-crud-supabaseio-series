@@ -1,0 +1,53 @@
+{
+  "name": "ionic-vue-crud-supabaseio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@ionic/vue": "5.6.3",
+    "@ionic/vue-router": "5.6.3",
+    "@supabase/supabase-js": "1.7.7",
+    "core-js": "^3.6.5",
+    "vue": "^3.0.0-0",
+    "vue-router": "4.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0-0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^7.0.0-0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "keywords": [
+    "vuejs",
+    "vue3",
+    "supabase",
+    "javascript"
+  ],
+  "description": "Note: Database associated with project has been deleted, see file config.js for configuring project"
+}
