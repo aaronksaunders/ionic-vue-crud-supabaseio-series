@@ -31,6 +31,9 @@ jobs:
           api_location: "api" # Api source code path - optional
           output_location: "dist" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
+        env: # Add environment variables here
+          VUE_APP_SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYwODE0NDE4NywiZXhwIjoxOTIzNzIwMTg3fQ.RAtKha219jkIgyYb0Hi_3GiH76KrP19trapN7x_b5nk
+          VUE_APP_SUPABASE_URL: https://fszeeckugrwhlnydnhbi.supabase.co
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
