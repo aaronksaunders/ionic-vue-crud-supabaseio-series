@@ -7,8 +7,8 @@ VUE_APP_SUPABASE_KEY="value"
 VUE_APP_SUPABASE_URL='value'
 ```
 
-## Videos
-- https://youtu.be/vkEJWFQwAOM
+## Video Playlist
+- https://www.youtube.com/playlist?list=PL2PY2-9rsgl1ttv0cehEDJwehVwjD02EH
 💥 VIDEO SERIES💥
 - Part 1: LiveStream: https://youtu.be/vkEJWFQwAOM​​
 - Part 2: Create the UI - https://youtu.be/kBE5ppJVn_I​​
